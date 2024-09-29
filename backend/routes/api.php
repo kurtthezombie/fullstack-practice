@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CaptchaController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -17,3 +18,6 @@ Route::post('login', [LoginController::class,'login']);
 
 
 Route::post('signup', [UserController::class,'store']);
+
+Route::get('reload-captcha',[CaptchaController::class, 'reloadCaptcha']);
+Route::post('post',[CaptchaController::class, 'post']);
