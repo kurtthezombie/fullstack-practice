@@ -1,7 +1,8 @@
 <script setup>
 import axios from 'axios'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, inject } from 'vue'
 import loginservice from '@/services/login-service';
+import { useLoading } from 'vue-loading-overlay';
 
 const name = ref('');
 const email = ref('');
@@ -12,6 +13,9 @@ const captchaImage = ref('');
 const captchaMessage = ref('');
 const captchaKey = ref('');
 const errors = ref({});
+
+const $loading = useLoading();
+const fullPage = ref(false);
 
 const submitForm = async () => {
     console.log('Name: ', name.value)
@@ -25,7 +29,7 @@ const submitForm = async () => {
         captcha: captcha.value,
         key: captchaKey.value
     };
-
+    const loader = $loading.show();
     try {
         errors.value = {};
         const response = await axios.post('http://127.0.0.1:8000/api/post', formData)
@@ -45,6 +49,8 @@ const submitForm = async () => {
             console.log(error.response.data);
             errors.value = error.response.data.errors;
         }
+    } finally {
+        loader.hide();
     }
     
     /*try {
